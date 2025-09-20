@@ -58,7 +58,7 @@ Sempre utilize de forma ética e responsável.
 
 ## 🚀 Passo a passo
 1. Acesse o app neste link:  
-   👉 https://usuario2207ed-hue.github.io/Dashboard-PC-Monitor/ 
+   👉 https://usuario2207ed-hue.github.io/Investigador-OSINT/ 
 
 2. No navegador do **celular (Chrome/Edge)**:  
    - Abra o menu (⋮)  
