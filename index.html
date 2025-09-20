@@ -1,0 +1,177 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🕵️ Investigador</title>
+<style>
+  body {
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    background:#1e1e1e;
+    color:#fff;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    justify-content:flex-start;
+    align-items:center;
+  }
+  header, footer {
+    width:100%;
+    padding:20px;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%{opacity:1}
+    50%{opacity:.5}
+    100%{opacity:1}
+  }
+  h1 { margin:0; font-size:1.8rem; }
+  #container {
+    width:90%;
+    max-width:600px;
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  input {
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:12px;
+    font-size:1rem;
+    box-sizing:border-box;
+  }
+  button {
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    font-size:1rem;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#4CAF50;
+    color:#fff;
+    transition:0.3s;
+  }
+  button:hover { background:#45a049; }
+  .btn-laranja {
+    background:#ff9800;
+  }
+  .btn-laranja:hover {
+    background:#e68900;
+  }
+  #resultado {
+    margin-top:20px;
+    width:100%;
+    text-align:left;
+    word-wrap:break-word;
+    max-width:600px;
+    color:#00ffea;
+  }
+  h2 { margin-top:20px; color:#f0ad4e; }
+  ul { list-style:none; padding-left:10px; }
+  a { color:#00ffea; word-break:break-all; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  @media(max-width:400px){
+    h1{ font-size:1.4rem; }
+    button,input{ font-size:0.95rem; padding:10px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔎 Investigador OSINT</h1>
+</header>
+
+<div id="container">
+  <input type="text" id="search" placeholder="Digite o nome de pessoa, empresa ou site...">
+  <button onclick="buscar()">🔍 Buscar</button>
+  <button onclick="resetar()">♻️ Resetar</button>
+  <button onclick="salvarLog()">💾 Salvar Log</button>
+  <button class="btn-laranja" onclick="window.open('https://translate.google.com/translate?hl=pt&sl=auto&tl=pt&u=https://osintframework.com/', '_blank')">🌐 OSINT Framework</button>
+  <div id="resultado"></div>
+</div>
+
+<footer>🛡️ Desenvolvido por <strong>EDCELL-TECH</strong></footer>
+
+<script>
+let logResultados = "";
+
+function buscar(){
+  const termo = document.getElementById("search").value.trim();
+  const resultado = document.getElementById("resultado");
+  logResultados = "";
+  if(!termo){ resultado.innerHTML="⚠️ Informe um termo de pesquisa."; return; }
+
+  resultado.innerHTML = `<h2>🔐 Segurança Cibernética</h2>`;
+  const ciber = [
+    {nome:"Have I Been Pwned", url:`https://haveibeenpwned.com/unifiedsearch/${encodeURIComponent(termo)}`},
+    {nome:"Shodan", url:`https://www.shodan.io/search?query=${encodeURIComponent(termo)}`},
+    {nome:"VirusTotal", url:`https://www.virustotal.com/gui/search/${encodeURIComponent(termo)}`},
+    {nome:"Censys", url:`https://search.censys.io/hosts?q=${encodeURIComponent(termo)}`}
+  ];
+  resultado.innerHTML += gerarLista(ciber);
+
+  resultado.innerHTML += `<h2>🕵️ Investigação</h2>`;
+  const investigacao = [
+    {nome:"Pipl", url:`https://pipl.com/search/?q=${encodeURIComponent(termo)}`},
+    {nome:"Social Searcher", url:`https://www.social-searcher.com/social-media-search/?q=${encodeURIComponent(termo)}`},
+    {nome:"Spokeo", url:`https://www.spokeo.com/${encodeURIComponent(termo)}`},
+    {nome:"Google", url:`https://www.google.com/search?q=${encodeURIComponent(termo)}`}
+  ];
+  resultado.innerHTML += gerarLista(investigacao);
+
+  resultado.innerHTML += `<h2>📈 Marketing / Concorrência</h2>`;
+  const marketing = [
+    {nome:"SimilarWeb", url:`https://www.similarweb.com/website/${encodeURIComponent(termo)}/`},
+    {nome:"Alexa", url:`https://www.alexa.com/siteinfo/${encodeURIComponent(termo)}`},
+    {nome:"SEMrush", url:`https://www.semrush.com/analytics/overview/?q=${encodeURIComponent(termo)}`}
+  ];
+  resultado.innerHTML += gerarLista(marketing);
+
+  resultado.innerHTML += `<h2>🏛 Governo / Defesa</h2>`;
+  const governo = [
+    {nome:"OpenCorporates", url:`https://opencorporates.com/companies?utf8=%E2%9C%93&q=${encodeURIComponent(termo)}`},
+    {nome:"Gov Data Search", url:`https://www.data.gov/search?q=${encodeURIComponent(termo)}`},
+    {nome:"EU Open Data Portal", url:`https://data.europa.eu/euodp/en/search?query=${encodeURIComponent(termo)}`}
+  ];
+  resultado.innerHTML += gerarLista(governo);
+
+  // Armazena log
+  logResultados = `Pesquisa: ${termo}\nResultados:\n`;
+  [...ciber,...investigacao,...marketing,...governo].forEach(item=>{
+    logResultados += `${item.nome}: ${item.url}\n`;
+  });
+}
+
+function gerarLista(arr){
+  let html="<ul>";
+  arr.forEach(item=>{
+    html += `<li><a href="${item.url}" target="_blank">${item.nome}</a></li>`;
+  });
+  html += "</ul>";
+  return html;
+}
+
+function resetar(){
+  document.getElementById("search").value="";
+  document.getElementById("resultado").innerHTML="";
+  logResultados = "";
+}
+
+function salvarLog(){
+  if(!logResultados){ alert("Nada para salvar."); return; }
+  const blob = new Blob([logResultados], {type:"text/plain"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "log_osint.txt";
+  link.click();
+}
+</script>
+</body>
+</html>
